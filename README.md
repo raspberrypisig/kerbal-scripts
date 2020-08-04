@@ -1,1 +1,4 @@
-# kerbal-scripts
+# Kerbal Scripts
+
+Baby Steps
+
