@@ -15,7 +15,7 @@ when (terminal:input:haschar) then {
   
   if char = "q" {
     set running to false.
-	  return false.
+    return false.
   }
   
   return true.
