@@ -1,2 +1,1 @@
 CORE:DOEVENT("Open Terminal").
-
