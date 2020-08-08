@@ -13,8 +13,8 @@ when time:seconds - lastDisplay > 0.1 then {
     print "Solid Fuel:" + stage:solidfuel at (0,1).
     print "Liquid Fuel:" + stage:liquidfuel at (0,2).
     
-	set lastDisplay to time:seconds.
-	return true.
+    set lastDisplay to time:seconds.
+    return true.
 }
 
 UNTIL stage:number = 1 {
