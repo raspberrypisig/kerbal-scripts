@@ -3,6 +3,7 @@ clearscreen.
 set throttle to 1.
 set steering to R(0,0,0)*UP.
 stage.
+wait until stage:ready.
 
 local lastDisplay to time:seconds.
 
