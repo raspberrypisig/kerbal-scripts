@@ -45,22 +45,22 @@ when stage:solidfuel < 0.1 and stage:liquidfuel = 0 then {
 // Runs every 0.1 seconds
 when time:seconds - lastDisplay > 0.1 then {
     print "==================================================" at (0,0).
-    print "                  STAGE " + stage:number at (0,1).
-    print "Solid Fuel:       " + round(stage:solidfuel,2)	at (0,3).
-    print "Liquid Fuel:      " + round(stage:liquidfuel,2) at (0,4).
+    print "                  STAGE " + stage:number + "     " at (0,1).
+    print "Solid Fuel:       " + round(stage:solidfuel,2) + "     " at (0,3).
+    print "Liquid Fuel:      " + round(stage:liquidfuel,2) + "     " at (0,4).
     print "==================================================" at (0,6).
     print "                  SPACECRAFT" at (0,7).
-	print "Max. Thrust:      " + round(maxthrust,2)  at (0,9).
-	print "Mass:             " + round(ship:mass,2) at (0,10).
-	print "Ship Apoapsis:    " + round(ship:apoapsis) at (0,11).
-	print "Ship Periapsis:   " + round(ship:periapsis) at (0,12).
+	print "Max. Thrust:      " + round(maxthrust,2) + "     "  at (0,9).
+	print "Mass:             " + round(ship:mass,2) + "     " at (0,10).
+	print "Ship Apoapsis:    " + round(ship:apoapsis) + "     " at (0,11).
+	print "Ship Periapsis:   " + round(ship:periapsis) + "     " at (0,12).
     print "==================================================" at (0,14).
-	print "                  TARGET" at (0,15).
-	print "Orbit height:     " + orbitHeight at (0,17).
-	print "ETA to Apoapsis:  " + round(eta:apoapsis) at (0,18).
+	print "                  TARGET" + "     " at (0,15).
+	print "Orbit height:     " + orbitHeight + "     " at (0,17).
+	print "ETA to Apoapsis:  " + round(eta:apoapsis) + "     " at (0,18).
     print "==================================================" at (0,20).	
 	print "                  CHECKPOINT" at (0,21).
-	print checkpoint at (0,23).
+	print checkpoint + "                                            " at (0,23).
 	
 	set lastDisplay to time:seconds.
 	return true.
