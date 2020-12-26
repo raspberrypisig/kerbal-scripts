@@ -1,0 +1,38 @@
+//  Q's Lander
+//
+//
+//
+//
+//
+
+// PHASE 0: Variables and settings
+
+//
+//
+
+
+
+
+SET SHIP_RADAR_HEIGHT TO 5.
+
+// PHASE 1: Point the right way!
+
+PRINT "SETTING SAS".
+sas on.
+WAIT 0.0001.
+SET SASMODE TO "RETROGRADE".
+WAIT 3.
+
+// PHASE 2: Kill horizontal velocity (now ground speed)
+
+PRINT "KILLING HORIZONTAL VELOCITY".
+UNTIL SHIP:GROUNDSPEED , 25 {
+		LOCK THROTTLE TO 1.
+		WAIT 0.01.
+ }
+ 
+ LOCK THROTTLE TO 0.
+ 
+ 
+ // PHASE 3: Gentle landing (we hope)!
+ 

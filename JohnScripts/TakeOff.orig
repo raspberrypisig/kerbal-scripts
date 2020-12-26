@@ -1,0 +1,35 @@
+//hellolaunch
+
+//First, we'll clear the terminal screen to make it look nice
+
+
+//switch to 0.
+
+CLEARSCREEN.
+
+BRAKES ON.
+SAS ON.
+//THROTTLE ON.
+lock throttle to 1.
+STAGE.
+WAIT 1.
+BRAKES OFF.
+
+//very crude takeoff procedure
+
+//Keep Straight on runway 90 deg
+LOCK STEERING TO HEADING(90,3).
+wait until airspeed > 75.
+	print "Rotate!".
+lock steering to heading(90,8).
+wait until altitude > 100.
+
+
+unlock steering.
+unlock throttle.
+
+SET VO TO GETVOICE(0). //Get a reference to the 0th voice in the chip
+VO: PLAY( NOTE(400,1.0)). //Starts a note at 400 Hz for 1 second
+print "Program Complete".
+
+//SET SHIP CONTROL PILOT MAIN THROTTLE TO 0.

@@ -1,0 +1,1 @@
+Copypath("0:/Launch_1", ""). 
