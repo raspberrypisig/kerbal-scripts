@@ -9,7 +9,20 @@ FUNCTION STARTDIALOG {
   SET labelIntro:STYLE:ALIGN TO "CENTER".
   SET labelIntro:STYLE:HSTRETCH TO True. 
   LOCAL vbox to gui:ADDVBOX().
-  LOCAL eastlatlong to apsettings:ADDHLAYOUT().
+  LOCAL firsthlayout to vbox:ADDHLAYOUT().
+  LOCAL eastlatlabel to firsthlayout:ADDLABEL("Lat").
+  LOCAL eastlattextfield to firsthlayout:ADDTEXTFIELD("").
+  LOCAL eastlonglabel to firsthlayout:ADDLABEL("Long").
+  LOCAL eastlongtextfield to firsthlayout:ADDTEXTFIELD("").
+  LOCAL ok TO gui:ADDBUTTON("OK").
+  SET ok:ONCLICK TO {
+    LOCAL la IS eastlattextfield:TEXT:TONUMBER().
+    LOCAL lo IS eastlongtextfield:TEXT:TONUMBER().
+    SET EAST_VES_USER_SELECTION to latlng(la, lo).
+    SET WEST_VES_USER_SELECTION to 0.
+    SET RUNWAY_ALT_USER_SELECTION to 0.
+    SET isdone to true.
+  }.
   gui:SHOW().
   SET isdone to false.
   WAIT UNTIL isdone.
