@@ -1,3 +1,26 @@
+set EAST_VES_USER_SELECTION to 0.
+set WEST_VES_USER_SELECTION to 0.
+set RUNWAY_ALT_USER_SELECTION to 0.
+
+//--------------------------Start Lat Long Dialog Box--------------------------------------------
+FUNCTION STARTDIALOG {
+  LOCAL gui is GUI(500).
+  LOCAL labelIntro IS gui:ADDLABEL("<size=20><b>Enter Details below. </b></size>").
+  SET labelIntro:STYLE:ALIGN TO "CENTER".
+  SET labelIntro:STYLE:HSTRETCH TO True. 
+  LOCAL vbox to gui:ADDVBOX().
+  LOCAL eastlatlong to apsettings:ADDHLAYOUT().
+  gui:SHOW().
+  SET isdone to false.
+  WAIT UNTIL isdone.
+}
+
+STARTDIALOG().
+
+//--------------------------End Lat Long Dialog Box--------------------------------------------
+
+
+
 // pilot control.
 
 run lib_pid.
@@ -23,12 +46,13 @@ set shipCompass to 0.
 //set runway_alt to 69.4664022 + 0.5. // Angie RWY 09
 
 
-set east_ves to latlng(-0.0499832,-74.496929). // Angie RWY 09
-set west_ves to latlng(-0.0485339,-74.718264). // Angie RWY 09
+//set east_ves to latlng(-0.0499832,-74.496929). // Angie RWY 09
+//set west_ves to latlng(-0.0485339,-74.718264). // Angie RWY 09
+//set runway_alt to 69.4664022 + 0.5. // Angie RWY 09
 
-
-set runway_alt to 69.4664022 + 0.5. // Angie RWY 09
-
+set east_ves to EAST_VES_USER_SELECTION.
+set west_ves to WEST_VES_USER_SELECTION.
+set runway_alt to RUNWAY_ALT_USER_SELECTION.
 
 lock runway_vect to (east_ves:position - west_ves:position):normalized.
 //lock runway_vect to (east_ves_pos - west_ves_pos):normalized. // Angie
