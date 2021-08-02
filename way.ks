@@ -1,17 +1,22 @@
 
-//FUNCTION waypointClickHandler {
-//    PARAMETER p.
-//    return {
-//        PRINT p.
-//        SET currentWaypointValue:text TO p.
-//        guiWP:hide().    
-//    }.
-//}
+FUNCTION waypointClickHandler {
+    PARAMETER p.
+    return {
+        SET currentWaypointValue:text TO p.
+        LOCAL wp IS waypoint(p).
+        SET currentWaypointLatValue:text to wp:geoposition:lat:tostring.
+        SET currentWaypointLongValue:text to wp:geoposition:lng:tostring.
+        SET currentWaypointAltValue:text to wp:altitude:tostring.
+        targetVlayout:show().
+        guiWP:hide().    
+
+    }.
+}
 
 
 FUNCTION MissionWaypoints {
     //Waypoint Selection screen
-    LOCAL guiWP IS GUI(200).
+    SET guiWP TO GUI(200).
     SET guiWP:x TO 580.
     SET guiWP:y TO 100.
     LOCAL labelSelectWaypoint IS guiWP:addlabel("<size=20><b>Select waypoint:</b></size>").
@@ -20,29 +25,12 @@ FUNCTION MissionWaypoints {
 
     LOCAL waypoints IS allwaypoints().
     LOCAL vboxWP IS guiWP:addvbox().
-    SET nameList TO list().
-    SET latCollection TO lexicon().
-    SET lngCollection TO lexicon().
-    SET altCollection TO lexicon().
     FOR nextwaypoint IN waypoints {
       //PRINT nextwaypoint:name.
       //PRINT nextwaypoint:geoposition:lat.
       //PRINT nextwaypoint:geoposition:lng.
       //PRINT nextwaypoint:altitude.
-      nameList:add(nextwaypoint).
-      latCollection:add(nextwaypoint:name, nextwaypoint:geoposition:lat).
-      lngCollection:add(nextwaypoint:name, nextwaypoint:geoposition:lng).
-      altCollection:add(nextwaypoint:name, nextwaypoint:altitude).
-      // get out of jail
-      // https://ksp-kos.github.io/KOS/language/anonymous.html#anonymous-functions
-      // https://ksp-kos.github.io/KOS/language/delegates.html
-      // SET vboxWP:addbutton(nextwaypoint:name):onclick TO waypointClickHandler(nextwaypoint:name).
-      SET vboxWP:addbutton(nextwaypoint:name):onclick TO {
-        PARAMETER p IS nextwaypoint:name.
-        PRINT p.
-        SET currentWaypointValue:text TO p.
-        guiWP:hide().
-      }.
+      SET vboxWP:addbutton(nextwaypoint:name):onclick TO waypointClickHandler(nextwaypoint:name).
     }.
 
 
@@ -57,17 +45,29 @@ FUNCTION MainGUI {
     LOCAL labelIntro IS gui:addlabel("<size=20><b>Select waypoint</b></size>").
     SET labelIntro:style:align TO "CENTER".
     SET labelIntro:style:hstretch TO True. 
-    LOCAL vbox IS gui:addvbox().
-    SET currentwaypointLabel TO vbox:addlabel("CURRENT SELECTION").
-    LOCAL hbox1 IS vbox:addhlayout().
+    LOCAL vbox IS gui:addvlayout().
+    LOCAL buttonWaypoint IS vbox:addbutton("MISSION WAYPOINTS").
+    SET targetVlayout TO gui:addvlayout().
+    SET currentwaypointLabel TO targetVlayout:addlabel("CURRENT SELECTION").
+    LOCAL hbox1 IS targetVlayout:addhlayout().
     SET currentWaypointNameLabel TO hbox1:addlabel("NAME:").
     SET currentWaypointValue TO hbox1:addlabel("").
+    LOCAL hbox2 IS targetVlayout:addhlayout().
+    SET currentWaypointLatLabel TO hbox2:addlabel("LAT:").
+    SET currentWaypointLatValue TO hbox2:addlabel(""). 
+    LOCAL hbox3 IS targetVlayout:addhlayout().
+    SET currentWaypointLongLabel TO hbox3:addlabel("LONG:").
+    SET currentWaypointLongValue TO hbox3:addlabel("").    
+    LOCAL hbox4 IS targetVlayout:addhlayout().
+    SET currentWaypointAltLabel TO hbox4:addlabel("ALTITUDE:").
+    SET currentWaypointAltValue TO hbox4:addlabel("").     
+    targetVlayout:hide().
 
-    LOCAL buttonWaypoint IS vbox:addbutton("Select a Mission Waypoint").
+
     SET buttonWaypoint:onclick TO {
         MissionWaypoints().
     }.
-    LOCAL ok IS gui:addbutton("OK").
+    LOCAL ok IS targetVlayout:addbutton("OK").
     SET ok:onclick TO {
         SET isdone to true.
     }.
