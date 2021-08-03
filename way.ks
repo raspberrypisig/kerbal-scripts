@@ -8,14 +8,32 @@ FUNCTION waypointClickHandler {
         SET currentWaypointLongValue:text to wp:geoposition:lng:tostring.
         SET currentWaypointAltValue:text to wp:altitude:tostring.
         targetVlayout:show().
-        guiWP:hide().    
+        guiWP:hide().   
+
+    }.
+}
+
+
+FUNCTION waypointCustomClickHandler {
+    PARAMETER name.
+    PARAMETER lat.
+    PARAMETER long.
+    PARAMETER alt.
+
+    return {
+        SET currentWaypointValue:text TO name.
+        SET currentWaypointLatValue:text to lat.
+        SET currentWaypointLongValue:text to long.
+        SET currentWaypointAltValue:text to alt.
+        targetVlayout:show().   
+        guiFly:hide(). 
 
     }.
 }
 
 
 FUNCTION MissionWaypoints {
-    //Waypoint Selection screen
+    // Mission Waypoint Selection screen
     SET guiWP TO GUI(200).
     SET guiWP:x TO 580.
     SET guiWP:y TO 100.
@@ -38,6 +56,29 @@ FUNCTION MissionWaypoints {
     
 }
 
+FUNCTION WaypointsFromFlyKS {
+    PARAMETER filename.
+
+    // Fly.ks waypoints selection screen
+    SET guiFly TO GUI(200).
+    SET guiFly:x TO 580.
+    SET guiFly:y TO 100.
+    LOCAL labelSelectWaypoint IS guiFly:addlabel("<size=20><b>Select waypoint:</b></size>").
+    SET labelSelectWaypoint:style:align TO "CENTER".
+    SET labelSelectWaypoint:style:hstretch TO True. 
+
+    LOCAL wayfromfly to open(filename).
+
+    LOCAL vboxFly IS guiFly:addvbox().
+    FOR line IN wayfromfly:readall {
+      LOCAL nextwaypoint IS line:split(",").
+      SET vboxFly:addbutton(nextwaypoint[0]):onclick TO waypointCustomClickHandler(nextwaypoint[0], nextwaypoint[1], nextwaypoint[2], nextwaypoint[3]).
+    }.
+
+
+    guiFly:show().   
+}.
+
 FUNCTION MainGUI { 
     SET gui TO GUI(500). 
     SET gui:x TO 60.
@@ -47,6 +88,8 @@ FUNCTION MainGUI {
     SET labelIntro:style:hstretch TO True. 
     LOCAL vbox IS gui:addvlayout().
     LOCAL buttonWaypoint IS vbox:addbutton("MISSION WAYPOINTS").
+    LOCAL buttonWaypointFly IS vbox:addbutton("WAYPOINTS FROM FLY.KS").
+     LOCAL buttonWaypointCustom IS vbox:addbutton("CUSTOM WAYPOINTS").
     SET targetVlayout TO gui:addvlayout().
     SET currentwaypointLabel TO targetVlayout:addlabel("CURRENT SELECTION").
     LOCAL hbox1 IS targetVlayout:addhlayout().
@@ -66,6 +109,12 @@ FUNCTION MainGUI {
 
     SET buttonWaypoint:onclick TO {
         MissionWaypoints().
+    }.
+    SET buttonWaypointFly:onclick TO {
+        WaypointsFromFlyKS("wayfromfly.txt").
+    }.
+    SET buttonWaypointCustom:onclick TO {
+        WaypointsFromFlyKS("waycustom.txt").
     }.
     LOCAL ok IS targetVlayout:addbutton("OK").
     SET ok:onclick TO {
