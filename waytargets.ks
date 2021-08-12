@@ -17,8 +17,11 @@ FOR target in alltargets {
 }.
 PRINT "---------------------------------".
 PRINT "Saved result to " + SAVEFILE.
-PRINT "---------------------------------".
+
 
 IF targetNumber <> -1 {
   vecdraw(V(0,0,0), alltargets[targetNumber]:position, Red, alltargets[targetNumber]:name, 1.0, TRUE).
+  PRINT "Also drawn vector. See it on map view.".
 }.
+
+PRINT "---------------------------------".
