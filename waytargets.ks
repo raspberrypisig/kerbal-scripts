@@ -1,4 +1,5 @@
 PARAMETER targetNumber IS -1.
+PARAMETER clear IS FALSE.
 
 SET SAVEFILE TO "waytargets.txt".
 
@@ -20,6 +21,9 @@ PRINT "Saved result to " + SAVEFILE.
 
 
 IF targetNumber <> -1 {
+  IF clear {
+    clearvecdraws().
+  }.
   vecdraw(V(0,0,0), alltargets[targetNumber]:position, Red, alltargets[targetNumber]:name, 1.0, TRUE).
   PRINT "Also drawn vector. See it on map view.".
 }.
