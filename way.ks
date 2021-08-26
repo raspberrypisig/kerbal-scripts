@@ -1,4 +1,12 @@
 
+FUNCTION drawArrowWaypoint {
+    PARAMETER wp.
+    clearvecdraws().
+    vecdraw({ return V(0,0,0). }, {return wp:position.}, Red, currentWaypointValue:text, 1.0, TRUE).
+    vecdraw({ {return wp:position.}. }, {return wp:position + up:forevector * 20000000.} , Yellow, currentWaypointValue:text, 0.2, TRUE, 0.2, FALSE).
+       vecdraw({ {return wp:position.}. }, {return wp:position + up:topvector * 20000000.} , Green, currentWaypointValue:text, 0.2, TRUE, 0.2, FALSE).
+}
+
 FUNCTION waypointClickHandler {
     PARAMETER p.
     return {
@@ -7,6 +15,7 @@ FUNCTION waypointClickHandler {
         SET currentWaypointLatValue:text to wp:geoposition:lat:tostring.
         SET currentWaypointLongValue:text to wp:geoposition:lng:tostring.
         SET currentWaypointAltValue:text to wp:altitude:tostring.
+        drawArrowWaypoint(wp).
         targetVlayout:show().
         guiWP:hide().   
 
@@ -79,6 +88,22 @@ FUNCTION WaypointsFromFlyKS {
     guiFly:show().   
 }.
 
+FUNCTION targetClickHandler {
+  
+  LOCAL targetNumber IS targetNumberTextField:text:tonumber.    
+  LIST targets in alltargets.
+  PRINT alltargets[targetNumber]:name.
+  targetVlayout:show().
+  
+     
+  SET currentWaypointValue:text TO alltargets[targetNumber]:name.
+  SET currentWaypointLatValue:text to alltargets[targetNumber]:geoposition:lat:tostring.
+  SET currentWaypointLongValue:text to alltargets[targetNumber]:geoposition:lng:tostring.
+  SET currentWaypointAltValue:text to alltargets[targetNumber]:altitude:tostring.
+  drawArrowWaypoint(alltargets[targetNumber]).
+  
+}.
+
 FUNCTION MainGUI { 
     SET gui TO GUI(500). 
     SET gui:x TO 60.
@@ -90,6 +115,10 @@ FUNCTION MainGUI {
     LOCAL buttonWaypoint IS vbox:addbutton("MISSION WAYPOINTS").
     LOCAL buttonWaypointFly IS vbox:addbutton("WAYPOINTS FROM FLY.KS").
      LOCAL buttonWaypointCustom IS vbox:addbutton("CUSTOM WAYPOINTS").
+    LOCAL hboxTarget IS gui:addhlayout().
+    LOCAL targetLabel IS hboxTarget:addlabel("<color=orange> or enter TARGET NUMBER</color>").
+    SET targetNumberTextField TO hboxTarget:addTextField().
+    LOCAL targetButton IS hboxTarget:addbutton("OK").
     SET targetVlayout TO gui:addvlayout().
     SET currentwaypointLabel TO targetVlayout:addlabel("CURRENT SELECTION").
     LOCAL hbox1 IS targetVlayout:addhlayout().
@@ -104,11 +133,13 @@ FUNCTION MainGUI {
     LOCAL hbox4 IS targetVlayout:addhlayout().
     SET currentWaypointAltLabel TO hbox4:addlabel("ALTITUDE:").
     SET currentWaypointAltValue TO hbox4:addlabel("").     
+    
     targetVlayout:hide().
 
 
     SET buttonWaypoint:onclick TO {
         MissionWaypoints().
+
     }.
     SET buttonWaypointFly:onclick TO {
         WaypointsFromFlyKS("wayfromfly.txt").
@@ -120,6 +151,11 @@ FUNCTION MainGUI {
     SET ok:onclick TO {
         SET isdone to true.
     }.
+
+    SET targetButton:onclick TO {
+       targetClickHandler().
+    }.
+
     gui:show().
     SET isdone to false.
     WAIT UNTIL isdone.
