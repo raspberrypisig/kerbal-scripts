@@ -4,7 +4,15 @@ FUNCTION drawArrowWaypoint {
     clearvecdraws().
     vecdraw({ return V(0,0,0). }, {return wp:position.}, Red, currentWaypointValue:text, 1.0, TRUE).
     vecdraw({ {return wp:position.}. }, {return wp:position + up:forevector * 20000000.} , Yellow, currentWaypointValue:text, 0.2, TRUE, 0.2, FALSE).
-       vecdraw({ {return wp:position.}. }, {return wp:position + up:topvector * 20000000.} , Green, currentWaypointValue:text, 0.2, TRUE, 0.2, FALSE).
+    vecdraw({ {return wp:position.}. }, {return wp:position + up:topvector * 20000000.} , Green, currentWaypointValue:text, 0.2, TRUE, 0.2, FALSE).
+}
+
+FUNCTION drawArrowVector {
+    PARAMETER v.
+    clearvecdraws().
+    vecdraw({ return V(0,0,0). }, {return v.}, Red, currentWaypointValue:text, 1.0, TRUE).
+    vecdraw({ {return v.}. }, {return v + up:forevector * 20000000.} , Yellow, currentWaypointValue:text, 0.2, TRUE, 0.2, FALSE).
+    vecdraw({ {return v.}. }, {return v + up:topvector * 20000000.} , Green, currentWaypointValue:text, 0.2, TRUE, 0.2, FALSE).
 }
 
 FUNCTION waypointClickHandler {
@@ -15,6 +23,8 @@ FUNCTION waypointClickHandler {
         SET currentWaypointLatValue:text to wp:geoposition:lat:tostring.
         SET currentWaypointLongValue:text to wp:geoposition:lng:tostring.
         SET currentWaypointAltValue:text to wp:altitude:tostring.
+        SET currentWaypointBearingValue:text to wp:geoposition:bearing:tostring.
+        SET currentWaypointHeadingValue:text to wp:geoposition:heading:tostring.
         drawArrowWaypoint(wp).
         targetVlayout:show().
         guiWP:hide().   
@@ -34,6 +44,11 @@ FUNCTION waypointCustomClickHandler {
         SET currentWaypointLatValue:text to lat.
         SET currentWaypointLongValue:text to long.
         SET currentWaypointAltValue:text to alt.
+        LOCAL bearing IS  BODY:GEOPOSITIONOF(latlng(lat:tonumber,long:tonumber):altitudeposition(alt:tonumber)):bearing.
+        LOCAL heading IS  BODY:GEOPOSITIONOF(latlng(lat:tonumber,long:tonumber):altitudeposition(alt:tonumber)):heading.
+        SET currentWaypointBearingValue:text to bearing:tostring.
+        SET currentWaypointHeadingValue:text to heading:tostring.
+        drawArrowVector(latlng(currentWaypointLatValue:text:tonumber, currentWaypointLongValue:text:tonumber):altitudeposition(currentWaypointAltValue:text:tonumber)).
         targetVlayout:show().   
         guiFly:hide(). 
 
@@ -132,7 +147,13 @@ FUNCTION MainGUI {
     SET currentWaypointLongValue TO hbox3:addlabel("").    
     LOCAL hbox4 IS targetVlayout:addhlayout().
     SET currentWaypointAltLabel TO hbox4:addlabel("ALTITUDE:").
-    SET currentWaypointAltValue TO hbox4:addlabel("").     
+    SET currentWaypointAltValue TO hbox4:addlabel("").   
+    LOCAL hbox5 IS targetVlayout:addhlayout().
+    SET currentWaypointBearingLabel TO hbox5:addlabel("BEARING:").
+    SET currentWaypointBearingValue TO hbox5:addlabel("").   
+    LOCAL hbox6 IS targetVlayout:addhlayout().
+    SET currentWaypointHeadingLabel TO hbox6:addlabel("HEADING:").
+    SET currentWaypointHeadingValue TO hbox6:addlabel("").             
     
     targetVlayout:hide().
 
